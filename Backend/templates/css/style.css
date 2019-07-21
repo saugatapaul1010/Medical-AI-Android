@@ -1,0 +1,48 @@
+body{
+
+ 	background-image: url("https://backgrounddownload.com/wp-content/uploads/2018/09/hd-abstract-red-background-4.jpg");
+ 	background-repeat: no-repeat;
+ 	background-size: 100%;
+ 	height: 100%;
+ 	margin-top: 15px;
+ }
+ h1{
+ 	color: white;
+ }
+.mystyle {
+  width: 100%;
+  padding: 25px;
+  background-color: coral;
+  color: white;
+  font-size: 25px;
+  box-sizing: border-box;
+  display: inline-block;
+}
+#myDIV{
+	display: none;
+}
+
+
+.map{
+	border: 2px solid red;
+	height: 25em;
+	width: 78%;
+	margin: 10px 5px 5px 5px;
+	float: right;
+	display: auto;
+}
+.hospital{
+	margin-top: 10px;
+	border: 2px solid red;
+	height: 25em;
+	width: 20%;
+	margin: 10px 5px 5px 5px;
+	display: block;
+	position: absolute;
+}
+img{
+  max-width:500px;
+}
+input[type=file]{
+padding:10px;
+background:#2d2d2d;}

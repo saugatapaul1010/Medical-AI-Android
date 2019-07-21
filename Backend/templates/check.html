@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Health Check up</title>
+
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<script>
+		var map = null;
+		var markerArray = [];
+		function submit(){
+
+
+			document.getElementById("demo").innerHTML = "Prediction Result";
+						clear();
+			 document.getElementById("change").innerHTML="Image Analysing....";
+
+		var val = $("#id_one").val();
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', "http://127.0.0.1:8000", true);
+		var data = new FormData();
+		data.append("type", val);
+		if(val != "cancer")
+			{console.log("Here");
+		data.append("img", $("#file_").prop('files')[0]);}
+		xhr.onreadystatechange = function(){
+
+			var obj = JSON.parse(this.responseText)[0];
+			if(!obj["empty"])
+			{
+				$("prediction-id").html(obj["prediction"]);
+				if(parseInt(obj["pred_val"]) != 0){
+					plotMap(obj["places"]);
+					addPlaces(obj["places"]);
+				}
+				$("#status").html("<b>"+obj["prediction"]+"</b>")
+				$("#result").html("<b>"+obj["pred_val"]+"</b>")
+
+			}
+		};
+		xhr.send(data);
+	}
+	function addPlaces(obj){	
+		$.each(obj, function(index, obj_){
+			console.log(obj_);
+			$("#hospital").append("<div><b>"+obj_["name"]+"</b><br>"+obj_["address"]+"</div><br><br><br>");
+		});
+	}
+	function initMap(){
+      var  kolkata= {lat: 22.567627, lng: 88.347444};
+  // The map, centered at Uluru
+  	map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 10, center: kolkata});
+	}
+	function clear()
+	{
+		for(var i=markerArray.length-1; i>=0; i--){
+			markerArray[i].setMap(null);
+			markerArray.pop();
+		}
+		$("#hospital").html("");
+	}
+	function plotMap(places){
+		
+		$.each(places, function(index,obj){
+			if(map != null){
+				markerArray.push(new google.maps.Marker({"position": obj["location"], map: map}));
+			}
+		});
+	}
+	</script>
+	<script>
+function show_hide_cancer(){
+  if($("#id_one").val() == "cancer")
+    {$("#myDIV").show();
+    $("#file_").hide();}
+    else{
+    	$("#myDIV").hide();
+    $("#file_").show();
+    }
+}
+</script>
+</head>
+<style type="text/css">
+	/*#myDIV {
+  width: 100%;
+  padding: 50px 0;
+  text-align: center;
+  background-color: lightblue;
+  margin-top: 20px;
+}*/
+ /*.mystyle{
+ 	display: none;
+ }
+ */
+ body{
+
+ 	background-image: url("https://backgrounddownload.com/wp-content/uploads/2018/09/hd-abstract-red-background-4.jpg");
+ 	background-repeat: no-repeat;
+ 	background-size: 100%;
+ 	height: 100%;
+ 	margin-top: 15px;
+ }
+ h1,h3{
+ 	color: white;
+ }
+ p{
+ 	color: white;
+ }
+.mystyle {
+  width: 100%;
+  padding: 25px;
+  background-color: coral;
+  color: white;
+  font-size: 25px;
+  box-sizing: border-box;
+  display: inline-block;
+}
+#myDIV{
+	display: none;
+}
+
+
+.map{
+	border: 2px solid red;
+	height: 25em;
+	width: 78%;
+	margin: 10px 5px 5px 5px;
+	float: right;
+	display: auto;
+}
+.hospital{
+	margin-top: 10px;
+	border: 2px solid red;
+	height: 25em;
+	width: 20%;
+	margin: 10px 5px 5px 5px;
+	display: block;
+	position: absolute;
+}
+img{
+  max-width:500px;
+}
+input[type=file]{
+padding:10px;
+background:#2d2d2d;}
+
+</style>
+<script>
+
+</script>
+<body>
+<h1 align="center">A medical application for detecting Malaria using microscopic cell images</h1>
+<center>
+
+<select id="id_one" onchange="show_hide_cancer()">
+  <option value="mal">Upload Malaria Cell Images</option>
+  <option value="brain">Upload Brain MRI Images</option>
+</select>
+
+<br>
+<br>
+<br>
+  <input id="file_" type="file" name="pic" accept="image/*" onchange="readURL(this);" />
+  <br>
+  <br>
+<button onclick="submit()" id="change"> Analyze Image</button>
+<br>
+<br>
+<img id="blah"/>
+<br>
+<h1 id="demo"></h1>
+<br>
+<h3><div id="status"> </div></h3>
+
+<h3><div id="result"> </div></h3>
+</center>
+
+
+<br>
+
+</body>
+<script>
+	 function readURL(input) {
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+
+	        reader.onload = function (e) {
+	            $('#blah')
+	                .attr('src', e.target.result);
+	        };
+
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+</script>
+</html>
