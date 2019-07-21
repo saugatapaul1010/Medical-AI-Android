@@ -3,7 +3,7 @@ from flask_cors import CORS
 import keras.backend as K
 from datetime import datetime as dt
 import numpy as np
-import cv2
+import cv2 import *
 from cv2 import resize, INTER_AREA
 import uuid
 from PIL import Image
