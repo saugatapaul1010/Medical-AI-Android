@@ -148,7 +148,6 @@ def index():
                             "tumor":preds[0], 
                             "normal":preds[1],
                             "pred_val": pred_val})
-
       elif(type_=='breast'):
          preds, pred_val = translate_cancer(model["model"].predict_proba(data), model["type"])
          final_json.append({"empty": False, 
@@ -192,20 +191,10 @@ def index():
     else:
       warn = "Feeding blank image won't work. Please enter an input image to continue."
       pred_val =" "
-      final_json.append({"pred_val": warn,
-                         "para": " ",
-                         "unin": " ",
-                         "tumor": " ",
-                         "normal": " ",
-                         "bac": " ",
-                         "viral": " ",
-                         "cnv": " ",
-                         "dme": " ",
-                         "drusen": " ",
-                         "mild": " ",
-                         "mod": " ",
-                         "severe": " ",
-                         "norm": " "})
+      final_json.append({"pred_val": warn,"para": " ","unin": " ","tumor": " ",
+                         "normal": " ","bac": " ","viral": " ","cnv": " ","dme": " ",
+                         "drusen": " ","mild": " ","mod": " ","severe": " ","norm": " ",
+                         "top1": " ","top2": " ","top3": " ","top4": " ","top5": " "})
 
     K.clear_session()
     return jsonify(final_json)
