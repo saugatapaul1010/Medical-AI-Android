@@ -212,9 +212,9 @@ def index():
   return jsonify({"empty":True})
 
 def load_model_(model_name):
-	model_name = os.path.join("weights",model_name)
-	model = load_model(model_name)
-	return model
+  model_name = os.path.join("weights",model_name)
+  model = load_model(model_name)
+  return model
 
 def get_model(name = None):
   model_name = []
@@ -385,9 +385,13 @@ def translate_vgg_16(preds, type_):
   top5_sent = ["Probability of the input image to be {}: {:.2f}%".format(top5,top5_proba*100)]
 
   total = [top1_sent,top2_sent,top3_sent,top4_sent,top5_sent]
-  prediction = ["Inference: The image is most likely to be of {}.".format(top1)]
+
+  if(top1.endswith("s")):
+    prediction = ["The image is most likely to be of {}.".format(top1)]
+  else:
+    prediction = ["The image is most likely to be of a {}.".format(top1)]
 
   return total, prediction
 
-
-app.run("0.0.0.0",80, debug = False)
+if __name__=="__main__":
+  app.run("0.0.0.0",80, debug = True)
