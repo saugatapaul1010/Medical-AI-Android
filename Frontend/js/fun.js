@@ -69,7 +69,7 @@ var map = null;
   function changeText(button, text, textToChangeBackTo) {
   buttonId = document.getElementById(button);
   buttonId.textContent = text;
-  setTimeout(function() { back(buttonId, textToChangeBackTo); }, 3000);
+  setTimeout(function() { back(buttonId, textToChangeBackTo); }, 10000);
   function back(button, textToChangeBackTo){ button.textContent = textToChangeBackTo; }
 }
 function show_hide_cancer(){
