@@ -194,7 +194,7 @@ def index():
       final_json.append({"pred_val": warn,"para": " ","unin": " ","tumor": " ", "can":" ",
                          "normal": " ","bac": " ","viral": " ","cnv": " ","dme": " ",
                          "drusen": " ","mild": " ","mod": " ","severe": " ","norm": " ",
-                         "top1": " ","top2": " ","top3": " ","top4": " ","top5": " "})
+                         "top1": " ","top2": " ","top3": " ","top4": " ","top5": " "}) 
 
     K.clear_session()
     return jsonify(final_json)
