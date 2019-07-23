@@ -72,7 +72,6 @@ def load_vgg16_model():
   ])
 
   vgg_model.load_weights("weights/vgg16.h5")
-
   return vgg_model
 
 app = Flask(__name__)
