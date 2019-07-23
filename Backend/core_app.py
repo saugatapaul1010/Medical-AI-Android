@@ -191,7 +191,7 @@ def index():
     else:
       warn = "Feeding blank image won't work. Please enter an input image to continue."
       pred_val =" "
-      final_json.append({"pred_val": warn,"para": " ","unin": " ","tumor": " ",
+      final_json.append({"pred_val": warn,"para": " ","unin": " ","tumor": " ", "can":" ",
                          "normal": " ","bac": " ","viral": " ","cnv": " ","dme": " ",
                          "drusen": " ","mild": " ","mod": " ","severe": " ","norm": " ",
                          "top1": " ","top2": " ","top3": " ","top4": " ","top5": " "})
