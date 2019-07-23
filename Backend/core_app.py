@@ -84,7 +84,6 @@ def home():
 
 @app.route("/", methods = ["POST", "GET"])
 def index():
-  
   if request.method == "POST":
     type_ = request.form.get("type", None)
     data = None
