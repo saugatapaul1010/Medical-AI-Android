@@ -74,6 +74,7 @@ def load_vgg16_model():
   vgg_model.load_weights("weights/vgg16.h5")
   return vgg_model
 
+"""Instantiating the flask object"""
 app = Flask(__name__)
 CORS(app)
 
@@ -135,33 +136,33 @@ def index():
       model=get_model(type_)[0]
 
       if(type_=='mal'):
-         preds, pred_val = translate_malaria(model["model"].predict_proba(data), model["type"])
+         preds, pred_val = translate_malaria(model["model"].predict_proba(data))
          final_json.append({"empty": False, "type":model["type"], 
                             "para":preds[0], 
                             "unin":preds[1],
                             "pred_val": pred_val})
       elif(type_=='brain'):
-         preds, pred_val = translate_brain(model["model"].predict_proba(data), model["type"])
+         preds, pred_val = translate_brain(model["model"].predict_proba(data))
          final_json.append({"empty": False, "type":model["type"], 
                             "tumor":preds[0], 
                             "normal":preds[1],
                             "pred_val": pred_val})
       elif(type_=='breast'):
-         preds, pred_val = translate_cancer(model["model"].predict_proba(data), model["type"])
+         preds, pred_val = translate_cancer(model["model"].predict_proba(data))
          final_json.append({"empty": False, 
                             "type":model["type"], 
                             "can":preds[0], 
                             "norm":preds[1],
                             "pred_val": pred_val})
       elif(type_=='pnm'):
-         preds, pred_val = translate_pnm(model["model"].predict_proba(data), model["type"])
+         preds, pred_val = translate_pnm(model["model"].predict_proba(data))
          final_json.append({"empty": False, "type":model["type"], 
                             "bac":preds[0], 
                             "normal":preds[1],
                             "viral":preds[2],
                             "pred_val": pred_val})
       elif(type_=='oct'):
-         preds, pred_val = translate_oct(model["model"].predict(data), model["type"])
+         preds, pred_val = translate_oct(model["model"].predict(data))
          final_json.append({"empty": False, "type":model["type"], 
                             "cnv":preds[0], 
                             "dme":preds[1],
@@ -169,7 +170,7 @@ def index():
                             "normal":preds[3],
                             "pred_val": pred_val})
       elif(type_=='dia_ret'):
-         preds, pred_val = translate_retinopathy(model["model"].predict_proba(data), model["type"])
+         preds, pred_val = translate_retinopathy(model["model"].predict_proba(data))
          final_json.append({"empty": False, "type":model["type"], 
                             "mild":preds[0], 
                             "mod":preds[1],
@@ -177,7 +178,7 @@ def index():
                             "severe":preds[3],
                             "pred_val": pred_val})
       elif(type_=='fun'):
-         preds, pred_val = translate_vgg_16(model["model"].predict(data), model["type"])
+         preds, pred_val = translate_vgg_16(model["model"].predict(data))
          final_json.append({"empty": False, 
                             "type":model["type"], 
                             "top1":preds[0], 
@@ -198,11 +199,15 @@ def index():
     return jsonify(final_json)
   return jsonify({"empty":True})
 
+"""This function is used to load the model from disk."""
 def load_model_(model_name):
   model_name = os.path.join("weights",model_name)
   model = load_model(model_name)
   return model
 
+"""This function is used to load the specific model for specific request calls. This
+function will return a list of dictionary items, where the key will contain the loaded
+models and the value will contain the request type."""
 def get_model(name = None):
   model_name = []
   if(name=='mal'):
@@ -219,10 +224,13 @@ def get_model(name = None):
     model_name.append({"model": load_model_("breastcancer.h5"), "type": name})
   elif(name=='fun'):
     model_name.append({"model": load_vgg16_model(), "type": name})
-
   return model_name
 
-def translate_malaria(preds, type_):
+"""preds will contain the predictions made by the model. We will take the class probabalities and 
+store them in individual variables. We will return the class probabilities and the final predictions
+made by the model to the frontend. The value contained in variables total and prediction will be
+displayed in the frontend HTML layout."""
+def translate_malaria(preds):
   y_proba_Class0 = preds.flatten().tolist()[0] * 100
   y_proba_Class1 = 100.0-y_proba_Class0
 
@@ -239,7 +247,9 @@ def translate_malaria(preds, type_):
       prediction="Inference: The cell image shows no evidence of Malaria."
       return total,prediction
 
-def translate_cancer(preds, type_):
+"""This function also does the same thing as above. Since it's a two class classification problem, 
+we can subtract one probability percentage values from 100 to get the other value."""
+def translate_cancer(preds):
   y_proba_Class0 = preds.flatten().tolist()[0] * 100
   y_proba_Class1 = 100.0-y_proba_Class0
 
@@ -255,7 +265,8 @@ def translate_cancer(preds, type_):
       prediction="Inference: The cell image shows no evidence of Invasive Ductal Carcinoma."
       return total,prediction
 
-def translate_brain(preds, type_):
+"""Tis function will compute the values for the brain cancer model"""
+def translate_brain(preds):
   y_proba_Class0 = preds.flatten().tolist()[0] * 100
   y_proba_Class1 = 100.0-y_proba_Class0
 
@@ -271,7 +282,10 @@ def translate_brain(preds, type_):
       prediction="Inference: The MRI scan does not show evidence of any brain tumor."
       return total,prediction
 
-def translate_oct(preds, type_):
+"""For multi class problems, we will obtain each of the class probabilities for each of the 
+classes. We will send this values to frontend using a jsonfy object. The final jsonfy object will
+contain """
+def translate_oct(preds):
   y_proba_Class0 = preds.flatten().tolist()[0] * 100
   y_proba_Class1 = preds.flatten().tolist()[1] * 100
   y_proba_Class2 = preds.flatten().tolist()[2] * 100
@@ -296,7 +310,7 @@ def translate_oct(preds, type_):
 
   return total, prediction
 
-def translate_pnm(preds, type_):
+def translate_pnm(preds):
   y_proba_Class0 = preds.flatten().tolist()[0] * 100
   y_proba_Class1 = preds.flatten().tolist()[1] * 100
   y_proba_Class2 = preds.flatten().tolist()[2] * 100
@@ -317,7 +331,7 @@ def translate_pnm(preds, type_):
 
   return total, prediction
 
-def translate_retinopathy(preds, type_):
+def translate_retinopathy(preds):
   y_proba_Class0 = preds.flatten().tolist()[0] * 100
   y_proba_Class1 = preds.flatten().tolist()[1] * 100
   y_proba_Class2 = preds.flatten().tolist()[2] * 100
@@ -344,7 +358,7 @@ def translate_retinopathy(preds, type_):
 
 #Predict image using VGG16 pretrained models
 
-def translate_vgg_16(preds, type_):
+def translate_vgg_16(preds):
   label = decode_predictions(preds)
   class_list = []
   conf_list = []
