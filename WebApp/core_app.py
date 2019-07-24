@@ -127,6 +127,10 @@ def checkup_from_any():
 def blog():
     return render_template('blog.html')
 
+@app.route('/about.html')
+def about():
+    return render_template('about.html')
+
 @app.route("/", methods = ["POST", "GET"])
 def index():
   print("INSIDE")
