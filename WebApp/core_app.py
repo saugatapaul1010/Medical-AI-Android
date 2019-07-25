@@ -36,14 +36,9 @@ def resize_image_pnm(image):
         resized_image = cv2.cvtColor(resized_image,cv2.COLOR_GRAY2RGB) #Convert to RGB
     return resized_image
 
-def convert_results(string):
-  name = string.replace("_"," ")
-  name = name.replace("-"," ")
-  name = name.title()
-  return name
-
 #Download VGG16 Weights.
 #wget https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_tf_dim_ordering_tf_kernels.h5
+
 def load_vgg16_model():
   input_shape = (224, 224, 3)
 
@@ -407,6 +402,12 @@ def translate_retinopathy(preds):
 
 
 #Predict image using VGG16 pretrained models
+
+def convert_results(string):
+  name = string.replace("_"," ")
+  name = name.replace("-"," ")
+  name = name.title()
+  return name
 
 def translate_vgg_16(preds):
   label = decode_predictions(preds)
