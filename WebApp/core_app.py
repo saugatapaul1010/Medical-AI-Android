@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 import keras.backend as K
@@ -127,9 +128,12 @@ def checkup_from_any():
 def blog():
     return render_template('blog.html')
 
+@app.route('/about.html')
+def about():
+    return render_template('about.html')
+
 @app.route("/", methods = ["POST", "GET"])
 def index():
-  print("INSIDE")
   if request.method == "POST":
     type_ = request.form.get("type", None)
     data = None
