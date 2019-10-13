@@ -1,1 +1,1 @@
-# Medical-AI-Android-App
+# Medical-AI-Android-Application
